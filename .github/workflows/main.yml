@@ -21,6 +21,8 @@ jobs:
     - name: Unity Build For Quest
       run: |
          & C:\Opt\UnityEditor\2020.1.3f1\Editor\Unity.exe -quit -batchmode -projectPath="..\actions-runner\_work\OVRSandbox\OVRSansbox" -executeMethod ApplicationBuild.BuildQuest -buildTarget Android -nographics -logFile - | Out-Host
+    - name: Release
+      run: Copy-Item .\Build D:\Builds\OVRSandbox${{github.run_number}}
     - uses: actions/upload-artifact@v1
       with:
        name: app_${{github.sha}}
