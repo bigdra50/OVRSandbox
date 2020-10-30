@@ -1,0 +1,33 @@
+name: Build
+ 
+on:
+  push:
+    branches: [ master ]
+ 
+jobs:
+  build:
+    runs-on: self-hosted
+ 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        lfs: true
+        clean: false
+ 
+    - name: Unity Build For Standalone
+      run: |
+         & C:\Opt\UnityEditor\2020.1.3f1\Editor\Unity.exe -quit -batchmode -projectPath .\actions-runner\_work\OVRSandbox\OVRSandbox -executeMethod ApplicationBuild.BuildStandAlone -buildTarget Standalone -nographics -logFile - | Out-Host
+    - uses: actions/upload-artifact@v1
+      with:
+       name: OVRSandboxStandalone_${{github.sha}}
+       path: .\Build\Standalone
+    - name: Unity Build For Quest
+      run: |
+         & C:\Opt\UnityEditor\2020.1.3f1\Editor\Unity.exe -quit -batchmode -projectPath .\actions-runner\_work\OVRSandbox\OVRSandbox -executeMethod ApplicationBuild.BuildQuest -buildTarget Android -nographics -logFile - | Out-Host
+    #- name: Release
+    #  run: Copy-Item .\actions-runner\_work\OVRSandbox\OVRSandbox\Build D:\Builds\OVRSandbox${{github.run_number}}
+    - uses: actions/upload-artifact@v1
+      with:
+       name: OVRSandboxQuest_${{github.sha}}
+       path: .\Build\Quest
