@@ -5,7 +5,22 @@ on:
     branches: [ master ]
  
 jobs:
-  build:
+  build-standalone:
+   strategy:
+    matrix: 
+     unity: ['2020.1.3f1']
+     editorPath: ['C:\Opt\UnityEditor\2020.1.3f1\Editor\Unity.exe']
+     projectPath: ['.\actions-runner\_work\OVRSandbox\OVRSandbox']
+
+   runs-on: self-hosted 
+   steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        lfs: true
+        clean: false
+ 
+  build-quest:
    strategy:
     matrix: 
      unity: ['2020.1.3f1']
