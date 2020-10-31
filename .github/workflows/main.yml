@@ -19,7 +19,15 @@ jobs:
       with:
         lfs: true
         clean: false
- 
+
+    - name: Build For Standalone
+      run: |
+         & ${{ matrix.editorPath }} -quit -batchmode -projectPath ${{ matrix.projectPath }} -executeMethod ApplicationBuild.BuildStandAlone -buildTarget Standalone -nographics -logFile - | Out-Host
+    - uses: actions/upload-artifact@v1
+      with:
+       name: OVRSandboxStandalone_${{github.run_number}}
+       path: .\Build\Standalone
+
   build-quest:
    strategy:
     matrix: 
@@ -35,20 +43,12 @@ jobs:
         lfs: true
         clean: false
  
-    - name: Build For Standalone
-      run: |
-         & ${{ matrix.editorPath }} -quit -batchmode -projectPath ${{ matrix.projectPath }} -executeMethod ApplicationBuild.BuildStandAlone -buildTarget Standalone -nographics -logFile - | Out-Host
-    - uses: actions/upload-artifact@v1
-      with:
-       name: OVRSandboxStandalone_${{github.run_number}}
-       path: .\Build\Standalone
     - name: Build For Quest
       run: |
          & ${{ matrix.editorPath }} -quit -batchmode -projectPath ${{ matrix.projectPath}} -executeMethod ApplicationBuild.BuildQuest -buildTarget Android -nographics -logFile - | Out-Host
-    #- name: Release
-    #  run: Copy-Item .\actions-runner\_work\OVRSandbox\OVRSandbox\Build D:\Builds\OVRSandbox${{github.run_number}}
     - uses: actions/upload-artifact@v1
       with:
        name: OVRSandboxQuest_${{github.run_number}}
        path: .\Build\Quest
-    
+    #- name: Release
+    #  run: Copy-Item .\actions-runner\_work\OVRSandbox\OVRSandbox\Build D:\Builds\OVRSandbox${{github.run_number}}    
